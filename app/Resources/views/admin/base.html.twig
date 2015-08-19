@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang='es'>
+    <head>
+        {% block metas %}{% endblock %}
+        {% block stylesheet %}{% endblock %}
+        {% block javascript %}{% endblock %}
+    </head>
+    <body>
+        <div class="container">
+        {% block header %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block footer %}{% endblock %}
+        </div>
+        {% block bodyJs %}{% endblock %}
+    </body>
+</html>
