@@ -7,12 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use AppBundle\Form\Type\UserCreationFormType as EditorUserCreationFormType;
-use AppBundle\Entity\User as EditorUser;
+use AppBundle\Form\Type\UserCreationFormType as AdminUserCreationFormType;
+use AppBundle\Entity\User as AdminUser;
 
 
 /**
- * @Route("/admin")
+ * @Route("/")
  */
 class AdminController extends Controller
 {
@@ -35,7 +35,7 @@ class AdminController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         $users = $userManager->findUsers();
 
-        return $this->render('admin/usersList.html.twig', array(
+        return $this->render('admin/users_list.html.twig', array(
              'users' => $users
         ));
     }
@@ -45,19 +45,40 @@ class AdminController extends Controller
      */
     public function createUsersAction()
     {
-        $roles = $this->getRolesForUser();
+        $form = $this->container->get('app.user_creation.form');
+        $formHandler = $this->container->get('app.user_creation.form.handler');
+        $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
 
-        $user = new EditorUser();
-        $createUserForm = $this->createForm(
-            new EditorUserCreationFormType("AppBundle\\Entity\\User", 
-                $roles
-            ), 
-            $user, 
-            array()
-        );
+        $process = $formHandler->process($confirmationEnabled);
+        if ($process) {
+            $user = $form->getData();
 
-        return $this->render('admin/usersCreate.html.twig', array(
-            "form" => $createUserForm->createView()
+            $authUser = false;
+            if ($confirmationEnabled) {
+                $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
+                $route = 'fos_user_registration_check_email';
+            } else {
+                $authUser = true;
+                $route = 'fos_user_registration_confirmed';
+            }
+
+            $this->setFlash('fos_user_success', 'registration.flash.user_creation');
+            $url = $this->container->get('router')->generate($route);
+            $response = new RedirectResponse($url);
+
+            if ($authUser) {
+                $this->authentificateUser($user, $response);
+            }
+
+            return $response;
+        }
+
+        //$roles = $this->getRolesForUser();
+        //$form->setRoles($roles);
+        //ladybug_dump($form);die;
+
+        return $this->render('admin/users_create.html.twig', array(
+            "form" => $form->createView()
         ));
     }
 

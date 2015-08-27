@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -10,29 +11,39 @@ class UserCreationFormType extends AbstractType
 {
     private $class;
     private $roles;
+    private $securityContext;
 
     /**
      * @param string $class The User class name
      */
-    public function __construct($class, $roles)
+    public function __construct($class, $roles, $securityContext)
     {
         $this->class = $class;
-        $this->roles = $roles;
+        $this->securityContext = $securityContext;
+        $this->roles = $this->getRolesForUser($roles);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
-            ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
+            ->add('username', null, array(
+                'label' => 'form.username',
+                'translation_domain' => 'FOSUserBundle',
+                'required' => true
+            ))
+            ->add('email', 'email', array(
+                'label' => 'form.email',
+                'translation_domain' => 'FOSUserBundle',
+                'required' => true
+            ))
+            ->add('firstName', null, array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
+            ->add('lastName', null, array('label' => 'form.lastName', 'translation_domain' => 'FOSUserBundle'))
             ->add('roles', 'choice', array(
                 'required' => true,
                 'multiple' => true,
                 'expanded' => false,
                 'choices' => $this->roles,
-            ))
-            ->add('save', 'submit', array('label' => 'Dar de Alta'))
-        ;
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -45,26 +56,56 @@ class UserCreationFormType extends AbstractType
 
     public function getName()
     {
-        return 'editor_user_creation';
+        return 'app_user_creation';
+    }
+    
+    /**
+     * Get roles.
+     *
+     * @return roles.
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+    
+    /**
+     * Set roles.
+     *
+     * @param roles the value to set.
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
     }
 
-    private function refactorRoles($originRoles)
+    private function getRolesForUser($tmpRoles)
     {
         $roles = array();
-        $rolesAdded = array();
+        $formatedRoles = $this->formatRolesForForm($tmpRoles);
 
-        // Add herited roles
-        foreach ($originRoles as $roleParent => $rolesHerit) {
-            $tmpRoles = array_values($rolesHerit);
-            $rolesAdded = array_merge($rolesAdded, $tmpRoles);
-            $roles[$roleParent] = array_combine($tmpRoles, $tmpRoles);
-        }
-        // Add missing superparent roles
-        $rolesParent = array_keys($originRoles);
-        foreach ($rolesParent as $roleParent) {
-            if (!in_array($roleParent, $rolesAdded)) {
-                $roles['-----'][$roleParent] = $roleParent;
+        foreach ($formatedRoles as $role) {
+            if ($this->securityContext->isGranted($role)) {
+                $roles[] = $role;
             }
         }
+
+        return $roles;
+    }
+
+    private function formatRolesForForm($rolesArray)
+    {
+        $roles = array();
+        foreach ($rolesArray as $roleKey => $inheritedRoles) {
+            if (!in_array($roleKey, $roles)) {
+                $roles[] = $roleKey;
+            }
+            foreach ($inheritedRoles as $role) {
+                if (!in_array($role, $roles)) {
+                    $roles[] = $role;
+                }
+            }
+        }
+        return $roles;
     }
 }
