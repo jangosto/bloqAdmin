@@ -85,7 +85,10 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     registration:
+        confirmation:
+            enabled: true
         form:
             type: app_user_creation
             handler: app.user_creation.form.handler
+            name: app_user_creation_form
 

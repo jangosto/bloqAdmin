@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 class UserCreationFormType extends AbstractType
 {
@@ -36,13 +37,22 @@ class UserCreationFormType extends AbstractType
                 'translation_domain' => 'FOSUserBundle',
                 'required' => true
             ))
-            ->add('firstName', null, array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-            ->add('lastName', null, array('label' => 'form.lastName', 'translation_domain' => 'FOSUserBundle'))
+            ->add('firstName', null, array(
+                'label' => 'form.firstName',
+                'translation_domain' => 'FOSUserBundle'
+            ))
+            ->add('lastName', null, array(
+                'label' => 'form.lastName',
+                'translation_domain' => 'FOSUserBundle'
+            ))
             ->add('roles', 'choice', array(
                 'required' => true,
                 'multiple' => true,
                 'expanded' => false,
-                'choices' => $this->roles,
+                'choice_list' => new ChoiceList(
+                    $this->roles,
+                    $this->roles
+                )
             ));
     }
 
@@ -85,7 +95,7 @@ class UserCreationFormType extends AbstractType
         $formatedRoles = $this->formatRolesForForm($tmpRoles);
 
         foreach ($formatedRoles as $role) {
-            if ($this->securityContext->isGranted($role)) {
+            if ($this->securityContext->isGranted($role) && $role !== "ROLE_USER") {
                 $roles[] = $role;
             }
         }
