@@ -45,6 +45,4 @@ assetic:
     use_controller: true
 
 #swiftmailer:
-#    transport: gmail
-#    username: juan.angosto.h@gmail.com
-#    password: ZONER30A85V
+#    delivery_address: anguszoner@gmail.com

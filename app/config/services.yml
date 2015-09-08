@@ -8,14 +8,14 @@ parameters:
 #    parameter_name: value
 
 services:
-    app.user_creation.form:
-        class: Symfony\Component\Form\Form
-        factory: ["@form.factory", createNamed]
-        arguments:
-            - %app.user.creation.form.name%
-            - %app.user.creation.form.type%
-            - null
-            - {validation_groups: %fos_user.registration.form.validation_groups%}
+#    app.user_creation.form:
+#        class: Symfony\Component\Form\Form
+#        factory: ["@form.factory", createNamed]
+#        arguments:
+#            - %app.user.creation.form.name%
+#            - %app.user.creation.form.type%
+#            - null
+#            - {validation_groups: %fos_user.registration.form.validation_groups%}
 
     app.user_creation.form.type:
         class: AppBundle\Form\Type\UserCreationFormType
@@ -29,11 +29,12 @@ services:
     app.user_creation.form.handler:
         class: AppBundle\Form\Handler\UserCreationFormHandler
         arguments:
-            - "@app.user_creation.form"
+            - "@fos_user.registration.form"
             - "@request"
             - "@fos_user.user_manager"
             - "@fos_user.mailer"
             - "@fos_user.util.token_generator"
+            - "@session"
         scope: request
         public: false
 

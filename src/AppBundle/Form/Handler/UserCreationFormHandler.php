@@ -3,6 +3,11 @@
 namespace AppBundle\Form\Handler;
 
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler as BaseHandler;
+use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserCreationFormHandler extends BaseHandler
 {
@@ -20,7 +25,7 @@ class UserCreationFormHandler extends BaseHandler
             if ($this->form->isValid()) {
                 $this->onSuccess($user, $confirmation);
 
-                return true;
+                return $password;
             }
         }
 

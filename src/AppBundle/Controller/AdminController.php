@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use AppBundle\Form\Type\UserCreationFormType as AdminUserCreationFormType;
@@ -45,12 +46,12 @@ class AdminController extends Controller
      */
     public function createUsersAction()
     {
-        $form = $this->container->get('app.user_creation.form');
-        $formHandler = $this->container->get('app.user_creation.form.handler');
+        $form = $this->container->get('fos_user.registration.form');
+        $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
 
         $process = $formHandler->process($confirmationEnabled);
-        if ($process) {
+        if ($process !== false) {
             $user = $form->getData();
 
             $authUser = false;
@@ -60,15 +61,31 @@ class AdminController extends Controller
             } else {
                 $authUser = true;
                 $route = 'fos_user_registration_confirmed';
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Datos de Cuenta de Colaborador')
+                    ->setFrom('noreplay@fanatic.futbol')
+                    ->setTo($user->getEmailCanonical())
+                    ->setBody(
+                        $this->renderView(
+                            "email/user_creation.email.twig",
+                            array(
+                                "user" => $user,
+                                "pass" => $process,
+                            ),
+                            "text/html"
+                        )
+                    );
+                $this->get('mailer')->send($message);
             }
 
-            $this->setFlash('fos_user_success', 'registration.flash.user_creation');
+//            $this->setFlash('fos_user_success', 'registration.flash.user_created');
             $url = $this->container->get('router')->generate($route);
             $response = new RedirectResponse($url);
 
-            if ($authUser) {
+/*            if ($authUser) {
                 $this->authentificateUser($user, $response);
-            }
+}*/
 
             return $response;
         }
