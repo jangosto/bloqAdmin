@@ -33,6 +33,15 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" aria-expanded="true" aria-haspopup="true" role="button" data-toggle="dropdown" href="#">Sites<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('admin_sites_list') }}">List</li>
+                        <li><a href="{{ path('admin_sites_create') }}">Create New</a></li>
+                    </ul>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a class="dropdown-toggle" aria-expanded="true" aria-haspopup="true" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"></i><span class="caret"></span></a>

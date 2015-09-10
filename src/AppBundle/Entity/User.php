@@ -32,10 +32,16 @@ class User extends BaseUser
      */
     protected $lastName;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Site")
+     */
+    protected $sites;
+
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+
+        $this->sites = array();
     }
     
     /**
