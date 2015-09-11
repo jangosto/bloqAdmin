@@ -24,7 +24,7 @@ class Site
     protected $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      * @var string
      */
     protected $slug;
@@ -35,10 +35,11 @@ class Site
      */
     protected $domain;
 
-    public function __construct()
-    {
-
-    }
+    /**
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    protected $enabled;
 
     /**
      * Get id.
@@ -119,4 +120,25 @@ class Site
     {
         $this->domain = $domain;
     }
+    
+    /**
+     * Get enabled.
+     *
+     * @return enabled.
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+    
+    /**
+     * Set enabled.
+     *
+     * @param enabled the value to set.
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
 }
+

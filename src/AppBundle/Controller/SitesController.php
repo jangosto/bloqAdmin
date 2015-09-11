@@ -19,21 +19,44 @@ class SitesController extends Controller
     /**
      * @Route("/list/", name="admin_sites_list")
      */
-    public function listUsersAction()
+    public function listSitesAction()
     {
-        $userManager = $this->container->get('fos_user.user_manager');
-        $users = $userManager->findUsers();
+        $siteManager = $this->container->get('admin.manager.site');
+        $sites = $siteManager->getAll();
 
-        return $this->render('admin/users_list.html.twig', array(
-            'users' => $users
+        return $this->render('admin/sites_list.html.twig', array(
+            'sites' => $sites
         ));
     }
 
     /**
      * @Route("/create/", name="admin_sites_create")
      */
-    public function createUsersAction()
+    public function createSitesAction(Request $request)
     {
+        $site = new AdminSite();
+        $site->setEnabled(false);
+        $form = $this->createForm('admin_site_creation', $site);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $site = $form->getData();
+
+            $siteManager = $this->container->get('admin.manager.site');
+            $siteManager->save($site);
+
+            $route = "admin_sites_list";
+            
+            $url = $this->container->get('router')->generate($route);
+
+            $response = new RedirectResponse($url);
+            return $response;
+        }
+
+        return $this->render('admin/sites_create.html.twig', array(
+            "form" => $form->createView()
+        ));
     }
 
 }

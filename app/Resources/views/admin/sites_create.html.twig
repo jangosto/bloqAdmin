@@ -1,0 +1,43 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <form rol="form" action="{{ path('admin_sites_create') }}" {{ form_enctype(form) }} method="POST">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.name, "Nombre") }}
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.slug, "Identificador") }}
+                        {{ form_errors(form.slug) }}
+                        {{ form_widget(form.slug, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.domain, "dominio") }}
+                        {{ form_errors(form.domain) }}
+                        {{ form_widget(form.domain, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <input type="submit" class= "btn btn-default" value="create">
+                    </div>
+                </div>
+            </div>
+            {{ form_rest(form) }}
+        </form>
+    </div>
+</div>
+{% endblock %}

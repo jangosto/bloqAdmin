@@ -12,16 +12,25 @@ class UserCreationFormType extends AbstractType
 {
     private $class;
     private $roles;
+    private $sites;
     private $securityContext;
 
     /**
      * @param string $class The User class name
      */
-    public function __construct($class, $roles, $securityContext)
+    public function __construct($class, $roles, $securityContext, $sitesManager)
     {
         $this->class = $class;
         $this->securityContext = $securityContext;
         $this->roles = $this->getRolesForUser($roles);
+
+        $sites = $sitesManager->getAll();
+        $sitesArray = array("names" => array(), "ids" => array());
+        foreach ($sites as $site) {
+            $sitesArray['names'][] = $site->getName();
+            $sitesArray['ids'][] = $site->getId();
+        }
+        $this->sites = $sitesArray;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -44,6 +53,15 @@ class UserCreationFormType extends AbstractType
             ->add('lastName', null, array(
                 'label' => 'form.lastName',
                 'translation_domain' => 'FOSUserBundle'
+            ))
+            ->add('sites', 'choice', array(
+                'required' => true,
+                'multiple' => true,
+                'expanded' => false,
+                'choice_list' => new ChoiceList(
+                    $this->sites['ids'],
+                    $this->sites['names']
+                )
             ))
             ->add('roles', 'choice', array(
                 'required' => true,
@@ -87,6 +105,26 @@ class UserCreationFormType extends AbstractType
     public function setRoles($roles)
     {
         $this->roles = $roles;
+    }
+
+    /**
+     * Get sites.
+     *
+     * return sites.
+     */
+    public function getSites()
+    {
+        return $this->sites;
+    }
+
+    /**
+     * Set sites.
+     *
+     * @param sites the value to set.
+     */
+    public function setSites($sites)
+    {
+        $this->sites = $sites;
     }
 
     private function getRolesForUser($tmpRoles)

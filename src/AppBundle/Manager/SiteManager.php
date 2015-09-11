@@ -4,22 +4,59 @@ namespace AppBundle\Manager;
 
 class SiteManager
 {
-    protected $dm;
+    protected $em;
     protected $repository;
     protected $class;
 
-    public function __construct($dm, $class)
+    public function __construct($em, $class)
     {
-        $this->dm = $dm;
+        $this->em = $em;
         $this->class = $class;
-        $this->repository = $dm->getRepository($this->class);
+        $this->repository = $em->getRepository($this->class);
     }
 
-    public function getAllSites()
+    public function getAll()
     {
         $sites = $this->repository
             ->findAll();
 
+        if (null === $sites) {
+            $sites = array();
+        }
+
         return $sites;
     }
+
+    public function getBySlug($slug)
+    {
+        $site = $this->repository
+            ->findBy(
+                array("slug" => $slug)
+            );
+
+        if (null === $sites) {
+            $site = null;
+        }
+
+        return $site;
+    }
+
+    public function save($object)
+    {
+        $this->em->persist($object);
+        $this->em->flush();
+
+        return $object->getId();
+    }
+
+    public function disableById($id)
+    {
+        $site = $this->repository
+            ->find($id);
+
+        $site->setEnabled(false);
+
+        $this->save($site);
+    }
 }
+

@@ -83,5 +83,25 @@ class User extends BaseUser
     {
         $this->lastName = $lastName;
     }
+    
+    /**
+     * Get sites.
+     *
+     * @return sites.
+     */
+    public function getSites()
+    {
+        return $this->sites;
+    }
+    
+    /**
+     * Set sites.
+     *
+     * @param sites the value to set.
+     */
+    public function setSites($sites)
+    {
+        $this->sites = $sites;
+    }
 }
 
