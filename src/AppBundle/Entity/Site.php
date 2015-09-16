@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -40,6 +41,16 @@ class Site
      * @var boolean
      */
     protected $enabled;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="sites")
+     */
+    protected $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -139,6 +150,31 @@ class Site
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+    }
+    
+    /**
+     * Get users.
+     *
+     * @return users.
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+    
+    /**
+     * Set users.
+     *
+     * @param users the value to set.
+     */
+    public function setUsers($users)
+    {
+        $this->users = $users;
+    }
+
+    public function addUser(User $user)
+    {
+        $this->users[] = $user;
     }
 }
 

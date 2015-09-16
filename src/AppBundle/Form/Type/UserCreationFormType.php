@@ -54,14 +54,10 @@ class UserCreationFormType extends AbstractType
                 'label' => 'form.lastName',
                 'translation_domain' => 'FOSUserBundle'
             ))
-            ->add('sites', 'choice', array(
-                'required' => true,
+            ->add('sites', 'entity', array(
+                'class' => 'AppBundle\Entity\Site',
+                'property' => 'name',
                 'multiple' => true,
-                'expanded' => false,
-                'choice_list' => new ChoiceList(
-                    $this->sites['ids'],
-                    $this->sites['names']
-                )
             ))
             ->add('roles', 'choice', array(
                 'required' => true,

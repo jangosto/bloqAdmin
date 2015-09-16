@@ -6,6 +6,7 @@ namespace AppBundle\Entity;
 
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -33,7 +34,11 @@ class User extends BaseUser
     protected $lastName;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Site")
+     * @ORM\ManyToMany(targetEntity="Site", inversedBy="users")
+     * @ORM\JoinTable(name="users_sites",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="site_id", referencedColumnName="id")}
+     *      )
      */
     protected $sites;
 
@@ -41,7 +46,7 @@ class User extends BaseUser
     {
         parent::__construct();
 
-        $this->sites = array();
+        $this->sites = new ArrayCollection();
     }
     
     /**
@@ -91,7 +96,7 @@ class User extends BaseUser
      */
     public function getSites()
     {
-        return $this->sites;
+        return $this->sites->toArray();
     }
     
     /**
@@ -102,6 +107,12 @@ class User extends BaseUser
     public function setSites($sites)
     {
         $this->sites = $sites;
+    }
+
+    public function addSite(Site $site)
+    {
+        $site->addUser($this);
+        $this->sites[] = $site;
     }
 }
 

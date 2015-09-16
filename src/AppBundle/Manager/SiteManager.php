@@ -34,7 +34,7 @@ class SiteManager
                 array("slug" => $slug)
             );
 
-        if (null === $sites) {
+        if (null === $site) {
             $site = null;
         }
 

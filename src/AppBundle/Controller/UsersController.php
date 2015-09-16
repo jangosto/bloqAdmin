@@ -23,7 +23,7 @@ class UsersController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $users = $userManager->findUsers();
-
+        
         return $this->render('admin/users_list.html.twig', array(
             'users' => $users
         ));
