@@ -1,0 +1,32 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Slug</th>
+                        <th>Domain</th>
+                        <th>Enabled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for site in sites %}
+                    <tr>
+                        <td>{{ site.id }}</td>
+                        <td>{{ site.name }}</td>
+                        <td>{{ site.slug }}</td>
+                        <td>{{ site.domain }}</td>
+                        <td><button class="btn btn-xs btn-{% if site.enabled == true %}success{% else %}danger{% endif %}">{% if site.enabled == true %}Enabled{% else %}Disabled{% endif %}</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

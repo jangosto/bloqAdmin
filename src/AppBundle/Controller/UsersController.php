@@ -23,7 +23,7 @@ class UsersController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $users = $userManager->findUsers();
-
+        
         return $this->render('admin/users_list.html.twig', array(
             'users' => $users
         ));
@@ -84,37 +84,6 @@ class UsersController extends Controller
         return $this->render('admin/users_create.html.twig', array(
             "form" => $form->createView()
         ));
-    }
-
-    private function getRolesForUser()
-    {
-        $roles = array();
-        $tmpRoles = $this->container->getParameter('security.role_hierarchy.roles');
-        $formatedRoles = $this->formatRolesForForm($tmpRoles);
-
-        foreach ($formatedRoles as $role) {
-            if ($this->get("security.context")->isGranted($role)) {
-                $roles[] = $role;
-            }
-        }
-
-        return $roles;
-    }
-
-    private function formatRolesForForm($rolesArray)
-    {
-        $roles = array();
-        foreach ($rolesArray as $roleKey => $inheritedRoles) {
-            if (!in_array($roleKey, $roles)) {
-                $roles[] = $roleKey;
-            }
-            foreach ($inheritedRoles as $role) {
-                if (!in_array($role, $roles)) {
-                    $roles[] = $role;
-                }
-            }
-        }
-        return $roles;
     }
 }
 

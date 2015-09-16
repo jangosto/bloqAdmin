@@ -39,6 +39,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
+                        {{ form_label(form.sites, "Medios") }}
+                        {{ form_errors(form.sites) }}
+                        {{ form_widget(form.sites) }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         {{ form_label(form.roles, "Permisos") }}
                         {{ form_errors(form.roles) }}
                         {{ form_widget(form.roles) }}
@@ -53,7 +60,6 @@
                 </div>
             </div>
             {{ form_rest(form) }}
-            {# form_widget(form.save, { 'attr': { 'class': 'btn btn-default' } }) #}
         </form>
     </div>
 </div>
