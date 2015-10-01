@@ -55,7 +55,7 @@ class UserCreationFormType extends AbstractType
                 'translation_domain' => 'FOSUserBundle'
             ))
             ->add('sites', 'entity', array(
-                'class' => 'AppBundle\Entity\Site',
+                'class' => 'Bloq\Common\EntitiesBundle\Entity\Site',
                 'property' => 'name',
                 'multiple' => true,
             ))
