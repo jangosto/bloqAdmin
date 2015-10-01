@@ -8,8 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+use Bloq\Common\EntitiesBundle\Entity\Site as AdminSite;
+
 use AppBundle\Form\Type\UserCreationFormType as AdminUserCreationFormType;
-use AppBundle\Entity\Site as AdminSite;
 
 /**
  * @Route("/sites")
