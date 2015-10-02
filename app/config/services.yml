@@ -4,7 +4,7 @@ parameters:
     app.entity.user.class: 'Bloq\Common\EntitiesBundle\Entity\User'
     admin.entity.site.class: 'Bloq\Common\EntitiesBundle\Entity\Site'
     admin.manager.site.class: 'Bloq\Common\EntitiesBundle\Manager\SiteManager'
-    admin.site_creation.form.type.class: 'AppBundle\Form\Type\SiteCreationFormType'
+    admin.site_creation.form.type.class: 'Bloq\Common\EntitiesBundle\Form\Type\SiteCreationFormType'
     app.user.creation.form.type: app_user_creation
     app.user.creation.form.handler: app.user_creation.form.handler.default
     app.user.creation.form.name: app_user_creation_form
@@ -21,7 +21,7 @@ services:
 #            - {validation_groups: %fos_user.registration.form.validation_groups%}
 
     app.user_creation.form.type:
-        class: AppBundle\Form\Type\UserCreationFormType
+        class: Bloq\Common\EntitiesBundle\Form\Type\UserCreationFormType
         tags:
             - { name: form.type, alias: app_user_creation }
         arguments:
@@ -31,7 +31,7 @@ services:
             - "@admin.manager.site"
 
     app.user_creation.form.handler:
-        class: AppBundle\Form\Handler\UserCreationFormHandler
+        class: Bloq\Common\EntitiesBundle\Form\Handler\UserCreationFormHandler
         arguments:
             - "@fos_user.registration.form"
             - "@request"
