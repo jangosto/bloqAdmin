@@ -30,6 +30,15 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
+                        {{ form_label(form.plainPassword, "Contraseña") }}
+                        {{ form_errors(form.plainPassword) }}
+                        {{ form_widget(form.plainPassword, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
                         {{ form_label(form.email, "Correo Electrónico") }}
                         {{ form_errors(form.email) }}
                         {{ form_widget(form.email, { 'attr': { 'class': 'form-control' } }) }}
