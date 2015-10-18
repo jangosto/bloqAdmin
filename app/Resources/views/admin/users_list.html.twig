@@ -29,7 +29,7 @@
                         <td><ul>{% for site in user.getSites() %}<li>{{ site.name }}</li>{% endfor %}</ul></td>
                         <td><ul>{% for role in user.roles %}<li>{{ role }}</li>{% endfor %}</ul></td>
                         <td><button class="btn btn-xs btn-{% if user.enabled == true %}success{% else %}danger{% endif %}">{% if user.enabled == true %}Enabled{% else %}Disabled{% endif %}</button></td>
-                        <td><button class="btn btn-xs btn-info">Complete Info</button><button class="btn btn-xs btn-default">Edit</button></td>
+                        <td><a href='{{ path('admin_users_edition', { 'id': user.id }) }}'><button class="btn btn-xs btn-default">Edit</button></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

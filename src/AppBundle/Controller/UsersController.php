@@ -78,13 +78,38 @@ class UsersController extends Controller
 
             return $response;
         }
-        //$roles = $this->getRolesForUser();
-        //$form->setRoles($roles);
-        //ladybug_dump($form);die;
 
         return $this->render('admin/users_create.html.twig', array(
             "form" => $form->createView()
         ));
     }
-}
 
+    /**
+     * @Route("/edit/{id}/", name="admin_users_edition")
+     */
+    public function editAction($id)
+    {
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $userManager->findUserBy(array('id' => $id));
+
+        $form = $this->container->get('fos_user.profile.form');
+        $formHandler = $this->container->get('fos_user.profile.form.handler');
+
+        $process = $formHandler->process($user);
+        if ($process) {
+            $route = 'admin_users_list';
+            $url = $this->container->get('router')->generate($route);
+            $response = new RedirectResponse($url);
+
+            return $response;
+        }
+
+        return $this->container->get('templating')->renderResponse(
+            'admin/users_create.html.twig',
+            array(
+                'form' => $form->createView(),
+                'user' => $user
+            )
+        );
+    }
+}

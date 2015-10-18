@@ -104,4 +104,7 @@ fos_user:
             type: app_user_creation
             handler: app.user_creation.form.handler
             name: app_user_creation_form
-        
+    profile:
+        form:
+            type: app_user_creation
+            name: app_user_creation_form
