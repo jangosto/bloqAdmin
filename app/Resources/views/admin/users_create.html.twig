@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-md-8">
-        <form rol="form" action="{{ path('admin_users_create') }}" {{ form_enctype(form) }} method="POST">
+        <form rol="form" action="{% if user is defined and user.id is defined %}{{ path('admin_users_edition', { 'id': user.id }) }}{% else %}{{ path('admin_users_create') }}{% endif %}" {{ form_enctype(form) }} method="POST">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
