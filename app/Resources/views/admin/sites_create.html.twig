@@ -23,9 +23,16 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        {{ form_label(form.domain, "dominio") }}
+                        {{ form_label(form.domain, "Dominio") }}
                         {{ form_errors(form.domain) }}
                         {{ form_widget(form.domain, { 'attr': { 'class': 'form-control' } }) }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.domainPath, "Path del Dominio") }}
+                        {{ form_errors(form.domainPath) }}
+                        {{ form_widget(form.domainPath, { 'attr': { 'class': 'form-control' } }) }}
                     </div>
                 </div>
             </div>
