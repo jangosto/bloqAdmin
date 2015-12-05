@@ -6,6 +6,7 @@
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
+/app/autoload_common.php
 /build/
 /vendor/
 /bin/
