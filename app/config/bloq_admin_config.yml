@@ -1,0 +1,7 @@
+bloq_entities:
+    entities:
+        user:
+            model_class: &userModelClass Bloq\Common\EntitiesBundle\Entity\User
+
+parameters:
+    bloq_entities.user.class: *userModelClass

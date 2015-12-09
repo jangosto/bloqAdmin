@@ -22,7 +22,7 @@ class UsersController extends Controller
      */
     public function listUsersAction()
     {
-        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager = $this->container->get('entities.user.manager');
         $users = $userManager->findUsers();
         
         return $this->render('admin/users_list.html.twig', array(
@@ -89,7 +89,7 @@ class UsersController extends Controller
      */
     public function editAction($id)
     {
-        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager = $this->container->get('entities.user.manager');
         $user = $userManager->findUserBy(array('id' => $id));
 
         $form = $this->container->get('fos_user.profile.form');
